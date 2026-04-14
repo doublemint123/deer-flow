@@ -116,6 +116,14 @@ export interface Translations {
     chats: string;
     demoChats: string;
     agents: string;
+    opsNav: string;
+    ops: {
+      dashboard: string;
+      alerts: string;
+      devices: string;
+      knowledge: string;
+      diagnosis: string;
+    };
   };
 
   // Agents

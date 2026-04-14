@@ -61,11 +61,11 @@ export const enUS: Translations = {
   welcome: {
     greeting: "Hello, again!",
     description:
-      "Welcome to 🦌 DeerFlow, an open source super agent. With built-in and custom skills, DeerFlow helps you search on the web, analyze data, and generate artifacts like slides, web pages and do almost anything.",
+      "Welcome to AIOps Intelligent Operations System.\nI can help you check alerts, analyze failures, query device status, search the knowledge base,\nand automatically diagnose issues and recommend solutions.",
 
     createYourOwnSkill: "Create Your Own Skill",
     createYourOwnSkillDescription:
-      "Create your own skill to release the power of DeerFlow. With customized skills,\nDeerFlow can help you search on the web, analyze data, and generate\n artifacts like slides, web pages and do almost anything.",
+      "Create your own skill to release the power of AIOps. With customized skills, AIOps\ncan help you analyze alerts, diagnose failures, search the knowledge base,\nand do almost anything.",
   },
 
   // Clipboard
@@ -172,6 +172,14 @@ export const enUS: Translations = {
     recentChats: "Recent chats",
     demoChats: "Demo chats",
     agents: "Agents",
+    opsNav: "Ops Navigation",
+    ops: {
+      dashboard: "Ops Dashboard",
+      alerts: "Alert Board",
+      devices: "Device Management",
+      knowledge: "Knowledge Base",
+      diagnosis: "Diagnosis History",
+    },
   },
 
   // Agents

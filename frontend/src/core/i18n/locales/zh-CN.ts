@@ -61,11 +61,11 @@ export const zhCN: Translations = {
   welcome: {
     greeting: "你好，欢迎回来！",
     description:
-      "欢迎使用 🦌 DeerFlow，一个完全开源的超级智能体。通过内置和自定义的 Skills，\nDeerFlow 可以帮你搜索网络、分析数据，还能为你生成幻灯片、\n图片、视频、播客及网页等，几乎可以做任何事情。",
+      "欢迎使用 AIOps 智能运维系统。\n我可以帮你查看告警、分析故障、查询设备状态、检索知识库，\n还能自动诊断问题并推荐解决方案。",
 
-    createYourOwnSkill: "创建你自己的 Agent SKill",
+    createYourOwnSkill: "创建你自己的 Agent Skill",
     createYourOwnSkillDescription:
-      "创建你的 Agent Skill 来释放 DeerFlow 的潜力。通过自定义技能，DeerFlow\n可以帮你搜索网络、分析数据，还能为你生成幻灯片、\n网页等作品，几乎可以做任何事情。",
+      "创建你的 Agent Skill 来释放 AIOps 的潜力。通过自定义技能，AIOps\n可以帮你分析告警、诊断故障、检索知识库，\n几乎可以做任何事情。",
   },
 
   // Clipboard
@@ -166,6 +166,14 @@ export const zhCN: Translations = {
     recentChats: "最近的对话",
     demoChats: "演示对话",
     agents: "智能体",
+    opsNav: "运维导航",
+    ops: {
+      dashboard: "运维大盘",
+      alerts: "告警看板",
+      devices: "设备管理",
+      knowledge: "知识库",
+      diagnosis: "诊断历史",
+    },
   },
 
   // Agents
