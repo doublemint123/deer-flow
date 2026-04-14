@@ -330,6 +330,7 @@ export const enUS: Translations = {
     sections: {
       appearance: "Appearance",
       memory: "Memory",
+      integrations: "Integrations",
       tools: "Tools",
       skills: "Skills",
       notification: "Notification",
@@ -430,6 +431,15 @@ export const enUS: Translations = {
     tools: {
       title: "Tools",
       description: "Manage the configuration and enabled status of MCP tools.",
+    },
+    integrations: {
+      title: "Integrations",
+      description:
+        "Configure connections to external systems. Saved credentials are used by MCP tools at runtime.",
+      configured: "Configured",
+      save: "Save",
+      saveSuccess: "Integration configuration saved.",
+      saveError: "Failed to save integration configuration.",
     },
     skills: {
       title: "Agent Skills",

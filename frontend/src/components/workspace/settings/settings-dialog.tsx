@@ -4,6 +4,7 @@ import {
   BellIcon,
   InfoIcon,
   BrainIcon,
+  LinkIcon,
   PaletteIcon,
   SparklesIcon,
   WrenchIcon,
@@ -19,6 +20,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AboutSettingsPage } from "@/components/workspace/settings/about-settings-page";
 import { AppearanceSettingsPage } from "@/components/workspace/settings/appearance-settings-page";
+import { IntegrationSettingsPage } from "@/components/workspace/settings/integration-settings-page";
 import { MemorySettingsPage } from "@/components/workspace/settings/memory-settings-page";
 import { NotificationSettingsPage } from "@/components/workspace/settings/notification-settings-page";
 import { SkillSettingsPage } from "@/components/workspace/settings/skill-settings-page";
@@ -29,6 +31,7 @@ import { cn } from "@/lib/utils";
 type SettingsSection =
   | "appearance"
   | "memory"
+  | "integrations"
   | "tools"
   | "skills"
   | "notification"
@@ -69,6 +72,11 @@ export function SettingsDialog(props: SettingsDialogProps) {
         label: t.settings.sections.memory,
         icon: BrainIcon,
       },
+      {
+        id: "integrations",
+        label: t.settings.sections.integrations,
+        icon: LinkIcon,
+      },
       { id: "tools", label: t.settings.sections.tools, icon: WrenchIcon },
       { id: "skills", label: t.settings.sections.skills, icon: SparklesIcon },
       { id: "about", label: t.settings.sections.about, icon: InfoIcon },
@@ -76,6 +84,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     [
       t.settings.sections.appearance,
       t.settings.sections.memory,
+      t.settings.sections.integrations,
       t.settings.sections.tools,
       t.settings.sections.skills,
       t.settings.sections.notification,
@@ -126,6 +135,9 @@ export function SettingsDialog(props: SettingsDialogProps) {
             <div className="space-y-8 p-6">
               {activeSection === "appearance" && <AppearanceSettingsPage />}
               {activeSection === "memory" && <MemorySettingsPage />}
+              {activeSection === "integrations" && (
+                <IntegrationSettingsPage />
+              )}
               {activeSection === "tools" && <ToolSettingsPage />}
               {activeSection === "skills" && (
                 <SkillSettingsPage

@@ -260,6 +260,7 @@ export interface Translations {
     sections: {
       appearance: string;
       memory: string;
+      integrations: string;
       tools: string;
       skills: string;
       notification: string;
@@ -353,6 +354,14 @@ export interface Translations {
     tools: {
       title: string;
       description: string;
+    };
+    integrations: {
+      title: string;
+      description: string;
+      configured: string;
+      save: string;
+      saveSuccess: string;
+      saveError: string;
     };
     skills: {
       title: string;

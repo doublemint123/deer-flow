@@ -315,6 +315,7 @@ export const zhCN: Translations = {
     sections: {
       appearance: "外观",
       memory: "记忆",
+      integrations: "集成配置",
       tools: "工具",
       skills: "技能",
       notification: "通知",
@@ -412,6 +413,15 @@ export const zhCN: Translations = {
     tools: {
       title: "工具",
       description: "管理 MCP 工具的配置和启用状态。",
+    },
+    integrations: {
+      title: "集成配置",
+      description:
+        "配置外部系统的连接信息。保存的凭据会在运行时供 MCP 工具使用。",
+      configured: "已配置",
+      save: "保存",
+      saveSuccess: "集成配置已保存。",
+      saveError: "保存集成配置失败。",
     },
     skills: {
       title: "技能",

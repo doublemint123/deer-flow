@@ -11,6 +11,7 @@ from app.gateway.routers import (
     artifacts,
     assistants_compat,
     channels,
+    integrations,
     mcp,
     memory,
     models,
@@ -52,6 +53,16 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     async with langgraph_runtime(app):
         logger.info("LangGraph runtime initialised")
 
+        # Initialize database connection and load integration configs into env
+        from app.gateway.db import close_db, init_db
+        from app.gateway.routers.integrations import sync_integration_env_vars
+
+        try:
+            await init_db()
+            await sync_integration_env_vars()
+        except Exception:
+            logger.exception("Failed to initialise integration configs (non-fatal)")
+
         # Start IM channel service if any channels are configured
         try:
             from app.channels.service import start_channel_service
@@ -70,6 +81,12 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
             await stop_channel_service()
         except Exception:
             logger.exception("Failed to stop channel service")
+
+        # Close database connection
+        try:
+            await close_db()
+        except Exception:
+            logger.exception("Failed to close database connection")
 
     logger.info("Shutting down API Gateway")
 
@@ -115,6 +132,10 @@ This gateway provides custom endpoints for models, MCP configuration, skills, an
             {
                 "name": "mcp",
                 "description": "Manage Model Context Protocol (MCP) server configurations",
+            },
+            {
+                "name": "integrations",
+                "description": "Manage external system integration configurations (API keys, URLs)",
             },
             {
                 "name": "memory",
@@ -171,6 +192,9 @@ This gateway provides custom endpoints for models, MCP configuration, skills, an
 
     # MCP API is mounted at /api/mcp
     app.include_router(mcp.router)
+
+    # Integrations API is mounted at /api/integrations
+    app.include_router(integrations.router)
 
     # Memory API is mounted at /api/memory
     app.include_router(memory.router)
