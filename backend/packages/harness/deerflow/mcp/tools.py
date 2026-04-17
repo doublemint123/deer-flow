@@ -79,6 +79,8 @@ async def get_mcp_tools() -> list[BaseTool]:
     try:
         # Create the multi-server MCP client
         logger.info(f"Initializing MCP client with {len(servers_config)} server(s)")
+        for _sname, _scfg in servers_config.items():
+            logger.info(f"  MCP server '{_sname}': transport={_scfg.get('transport', 'stdio')}, command={_scfg.get('command', 'N/A')}, args={_scfg.get('args', [])!r}")
 
         # Inject initial OAuth headers for server connections (tool discovery/session init)
         initial_oauth_headers = await get_initial_oauth_headers(extensions_config)
@@ -99,7 +101,8 @@ async def get_mcp_tools() -> list[BaseTool]:
 
         # Get all tools from all servers
         tools = await client.get_tools()
-        logger.info(f"Successfully loaded {len(tools)} tool(s) from MCP servers")
+        tool_names = [t.name for t in tools]
+        logger.info(f"Successfully loaded {len(tools)} MCP tool(s): {tool_names}")
 
         # Patch tools to support sync invocation, as deerflow client streams synchronously
         for tool in tools:
@@ -110,4 +113,5 @@ async def get_mcp_tools() -> list[BaseTool]:
 
     except Exception as e:
         logger.error(f"Failed to load MCP tools: {e}", exc_info=True)
+        logger.error(f"  servers_config was: {servers_config!r}")
         return []
