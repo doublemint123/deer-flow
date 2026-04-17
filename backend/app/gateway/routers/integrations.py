@@ -77,6 +77,35 @@ INTEGRATION_REGISTRY: dict[str, IntegrationDef] = {
             ),
         ],
     ),
+    "topology-probe": IntegrationDef(
+        display_name="拓扑探测系统",
+        display_name_en="Topology Probe",
+        description="网络资产探测与管理平台，支持资产扫描、指纹识别、拓扑发现",
+        description_en="Network asset discovery and management with scanning, fingerprinting and topology",
+        mcp_server="topology-probe-mcp",
+        env_mapping={
+            "TOPOLOGY_PROBE_API_BASE_URL": "base_url",
+            "TOPOLOGY_PROBE_API_KEY": "api_key",
+        },
+        fields=[
+            IntegrationFieldDef(
+                key="base_url",
+                label="API 地址",
+                label_en="API Base URL",
+                type="url",
+                required=True,
+                placeholder="https://192.168.80.102:7000",
+            ),
+            IntegrationFieldDef(
+                key="api_key",
+                label="API Key",
+                label_en="API Key",
+                type="secret",
+                required=True,
+                placeholder="your-api-key",
+            ),
+        ],
+    ),
 }
 
 
