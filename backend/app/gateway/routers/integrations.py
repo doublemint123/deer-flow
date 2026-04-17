@@ -18,6 +18,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app.gateway.db import get_db
+from deerflow.config.extensions_config import ExtensionsConfig
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api", tags=["integrations"])
@@ -120,7 +121,9 @@ def _update_extensions_config(definition: IntegrationDef, config: dict[str, Any]
     """
     if not definition.mcp_server:
         return
-    ext_path = Path(os.environ.get("DEER_FLOW_HOME", "/app/deer-flow")) / "extensions_config.json"
+    ext_path = ExtensionsConfig.resolve_config_path()
+    if ext_path is None:
+        ext_path = Path(os.environ.get("DEER_FLOW_EXTENSIONS_CONFIG_PATH", "/app/deer-flow/extensions_config.json"))
     if not ext_path.exists():
         return
     try:
