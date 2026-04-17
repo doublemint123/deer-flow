@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
@@ -41,6 +42,7 @@ class IntegrationDef(BaseModel):
     description: str = ""
     description_en: str = ""
     env_mapping: dict[str, str]   # env_var -> config field key
+    mcp_server: str = ""          # key in extensions_config.json mcpServers
     fields: list[IntegrationFieldDef]
 
 
@@ -50,6 +52,7 @@ INTEGRATION_REGISTRY: dict[str, IntegrationDef] = {
         display_name_en="TCP Probe Monitor",
         description="网络探测监控平台，支持 PING/TCP/URL 拨测和告警",
         description_en="Network probe monitoring with PING/TCP/URL probes and alarms",
+        mcp_server="tcp-probe-mcp",
         env_mapping={
             "PROBE_MONITOR_API_BASE_URL": "base_url",
             "PROBE_MONITOR_API_KEY": "api_key",
@@ -108,6 +111,34 @@ def _apply_env_vars(key: str, definition: IntegrationDef, config: dict[str, Any]
             logger.debug("Set env %s for integration %s", env_var, key)
 
 
+def _update_extensions_config(definition: IntegrationDef, config: dict[str, Any]) -> None:
+    """Write resolved env values into extensions_config.json.
+
+    This triggers the LangGraph MCP cache to reload (mtime-based).
+    Values written without the ``$`` prefix are passed through as-is
+    by ``resolve_env_variables()``.
+    """
+    if not definition.mcp_server:
+        return
+    ext_path = Path(os.environ.get("DEER_FLOW_HOME", "/app/deer-flow")) / "extensions_config.json"
+    if not ext_path.exists():
+        return
+    try:
+        data = json.loads(ext_path.read_text(encoding="utf-8"))
+        server_cfg = data.get("mcpServers", {}).get(definition.mcp_server)
+        if server_cfg is None:
+            return
+        env_section = server_cfg.setdefault("env", {})
+        for env_var, config_field in definition.env_mapping.items():
+            value = config.get(config_field, "")
+            if value:
+                env_section[env_var] = value
+        ext_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        logger.info("Updated extensions_config.json for MCP server %s", definition.mcp_server)
+    except Exception:
+        logger.exception("Failed to update extensions_config.json")
+
+
 # ---------------------------------------------------------------------------
 # Response / request models
 # ---------------------------------------------------------------------------
@@ -161,6 +192,7 @@ async def sync_integration_env_vars() -> None:
                     continue
                 cfg = row_config if isinstance(row_config, dict) else json.loads(row_config)
                 _apply_env_vars(row_key, definition, cfg)
+                _update_extensions_config(definition, cfg)
                 logger.info("Loaded integration config: %s", row_key)
     except Exception:
         logger.exception("Failed to sync integration env vars from database")
@@ -252,6 +284,9 @@ async def update_integration(key: str, request: IntegrationUpdateRequest) -> Int
 
     # Apply to os.environ immediately
     _apply_env_vars(key, defn, merged)
+
+    # Update extensions_config.json so LangGraph MCP cache auto-reloads
+    _update_extensions_config(defn, merged)
 
     # Return masked response
     masked = _mask_config(merged, defn.fields)
