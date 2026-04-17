@@ -355,6 +355,9 @@ export interface Translations {
     tools: {
       title: string;
       description: string;
+      envOk: string;
+      envMissing: string;
+      envUnconfigured: string;
     };
     integrations: {
       title: string;

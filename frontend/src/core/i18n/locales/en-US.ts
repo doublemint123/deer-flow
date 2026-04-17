@@ -432,6 +432,9 @@ export const enUS: Translations = {
     tools: {
       title: "Tools",
       description: "Manage the configuration and enabled status of MCP tools.",
+      envOk: "Ready",
+      envMissing: "Env missing",
+      envUnconfigured: "Not configured",
     },
     integrations: {
       title: "Integrations",

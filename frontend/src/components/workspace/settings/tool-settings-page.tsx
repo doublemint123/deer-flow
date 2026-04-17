@@ -15,6 +15,22 @@ import { env } from "@/env";
 
 import { SettingsSection } from "./settings-section";
 
+function EnvStatusIndicator({ status }: { status: MCPServerConfig["env_status"] }) {
+  const { t } = useI18n();
+  const statusMap = {
+    ok: { color: "bg-green-500", label: t.settings.tools.envOk },
+    missing: { color: "bg-yellow-500", label: t.settings.tools.envMissing },
+    unconfigured: { color: "bg-red-500", label: t.settings.tools.envUnconfigured },
+  };
+  const s = statusMap[status] ?? statusMap.unconfigured;
+  return (
+    <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+      <span className={`inline-block h-2 w-2 rounded-full ${s.color}`} />
+      {s.label}
+    </span>
+  );
+}
+
 export function ToolSettingsPage() {
   const { t } = useI18n();
   const { config, isLoading, error } = useMCPConfig();
@@ -48,6 +64,7 @@ function MCPServerList({
             <ItemTitle>
               <div className="flex items-center gap-2">
                 <div>{name}</div>
+                <EnvStatusIndicator status={config.env_status} />
               </div>
             </ItemTitle>
             <ItemDescription className="line-clamp-4">

@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Literal
 
@@ -43,6 +44,7 @@ class McpServerConfigResponse(BaseModel):
     headers: dict[str, str] = Field(default_factory=dict, description="HTTP headers to send (for sse or http type)")
     oauth: McpOAuthConfigResponse | None = Field(default=None, description="OAuth configuration for MCP HTTP/SSE servers")
     description: str = Field(default="", description="Human-readable description of what this MCP server provides")
+    env_status: str = Field(default="ok", description="Environment variable status: 'ok', 'missing', or 'unconfigured'")
 
 
 class McpConfigResponse(BaseModel):
@@ -63,6 +65,24 @@ class McpConfigUpdateRequest(BaseModel):
     )
 
 
+def _compute_env_status(env_vars: dict[str, str]) -> str:
+    """Check whether env vars for an MCP server are properly resolved.
+
+    Returns 'ok' if all non-empty, 'unconfigured' if any $VAR placeholder
+    is still unresolved, 'missing' if resolved to empty string.
+    """
+    if not env_vars:
+        return "ok"
+    for _key, value in env_vars.items():
+        if value.startswith("$"):
+            resolved = os.environ.get(value[1:], "")
+            if not resolved:
+                return "unconfigured"
+        elif not value:
+            return "missing"
+    return "ok"
+
+
 @router.get(
     "/mcp/config",
     response_model=McpConfigResponse,
@@ -70,29 +90,15 @@ class McpConfigUpdateRequest(BaseModel):
     description="Retrieve the current Model Context Protocol (MCP) server configurations.",
 )
 async def get_mcp_configuration() -> McpConfigResponse:
-    """Get the current MCP configuration.
-
-    Returns:
-        The current MCP configuration with all servers.
-
-    Example:
-        ```json
-        {
-            "mcp_servers": {
-                "github": {
-                    "enabled": true,
-                    "command": "npx",
-                    "args": ["-y", "@modelcontextprotocol/server-github"],
-                    "env": {"GITHUB_TOKEN": "ghp_xxx"},
-                    "description": "GitHub MCP server for repository operations"
-                }
-            }
-        }
-        ```
-    """
     config = get_extensions_config()
 
-    return McpConfigResponse(mcp_servers={name: McpServerConfigResponse(**server.model_dump()) for name, server in config.mcp_servers.items()})
+    servers = {}
+    for name, server in config.mcp_servers.items():
+        data = server.model_dump()
+        data["env_status"] = _compute_env_status(data.get("env", {}))
+        servers[name] = McpServerConfigResponse(**data)
+
+    return McpConfigResponse(mcp_servers=servers)
 
 
 @router.put(

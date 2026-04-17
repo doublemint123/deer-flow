@@ -414,6 +414,9 @@ export const zhCN: Translations = {
     tools: {
       title: "工具",
       description: "管理 MCP 工具的配置和启用状态。",
+      envOk: "就绪",
+      envMissing: "环境变量缺失",
+      envUnconfigured: "未配置",
     },
     integrations: {
       title: "集成配置",
