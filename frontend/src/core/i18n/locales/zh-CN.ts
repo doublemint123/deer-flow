@@ -173,6 +173,7 @@ export const zhCN: Translations = {
       devices: "设备管理",
       knowledge: "知识库",
       diagnosis: "诊断历史",
+      probe: "TCP拨测",
     },
   },
 

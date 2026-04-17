@@ -179,6 +179,7 @@ export const enUS: Translations = {
       devices: "Device Management",
       knowledge: "Knowledge Base",
       diagnosis: "Diagnosis History",
+      probe: "Network Probe",
     },
   },
 

@@ -7,6 +7,7 @@ import {
   History,
   LayoutDashboard,
   MessagesSquare,
+  Network,
   Server,
 } from "lucide-react";
 import Link from "next/link";
@@ -28,6 +29,7 @@ const opsNavItems = [
   { key: "devices" as const, icon: Server, agent: "device-management" },
   { key: "knowledge" as const, icon: BookOpen, agent: "knowledge-base" },
   { key: "diagnosis" as const, icon: History, agent: "diagnosis-history" },
+  { key: "probe" as const, icon: Network, agent: "network-probe" },
 ];
 
 export function WorkspaceNavChatList() {

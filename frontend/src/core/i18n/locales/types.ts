@@ -123,6 +123,7 @@ export interface Translations {
       devices: string;
       knowledge: string;
       diagnosis: string;
+      probe: string;
     };
   };
 
