@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   MessagesSquare,
   Network,
+  Radar,
   Server,
 } from "lucide-react";
 import Link from "next/link";
@@ -30,6 +31,7 @@ const opsNavItems = [
   { key: "knowledge" as const, icon: BookOpen, agent: "knowledge-base" },
   { key: "diagnosis" as const, icon: History, agent: "diagnosis-history" },
   { key: "probe" as const, icon: Network, agent: "network-probe" },
+  { key: "topology" as const, icon: Radar, agent: "topology-probe" },
 ];
 
 export function WorkspaceNavChatList() {

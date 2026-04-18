@@ -124,6 +124,7 @@ export interface Translations {
       knowledge: string;
       diagnosis: string;
       probe: string;
+      topology: string;
     };
   };
 

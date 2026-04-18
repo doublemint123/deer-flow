@@ -180,6 +180,7 @@ export const enUS: Translations = {
       knowledge: "Knowledge Base",
       diagnosis: "Diagnosis History",
       probe: "Network Probe",
+      topology: "Topology Probe",
     },
   },
 

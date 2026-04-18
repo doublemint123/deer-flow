@@ -174,6 +174,7 @@ export const zhCN: Translations = {
       knowledge: "知识库",
       diagnosis: "诊断历史",
       probe: "TCP拨测",
+      topology: "拓扑探测",
     },
   },
 
